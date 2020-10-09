@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource name="jdbc/ConnectionPoolHolder"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="root"
+              password="admin"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/servlet_exhibitions_db?characterEncoding=UTF-8"
+              validationQuery="select 1"
+              maxActive="10"
+              maxIdle="4"/>
+
+
+
+</Context>
