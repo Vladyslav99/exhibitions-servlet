@@ -10,12 +10,15 @@ import my.exhibitions.servlet.model.entity.ExhibitionEventStatus;
 import my.exhibitions.servlet.model.entity.Hall;
 import my.exhibitions.servlet.model.service.ExhibitionEventService;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class JDBCExhibitionEventService implements ExhibitionEventService {
+
+    private static final Logger log = Logger.getLogger(JDBCExhibitionEventService.class);
 
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
@@ -46,8 +49,7 @@ public class JDBCExhibitionEventService implements ExhibitionEventService {
         try (ExhibitionEventDao exhibitionEventDao = daoFactory.createExhibitionEventDao()) {
             exhibitionEventDao.create(exhibitionEvent);
         } catch (Exception exception) {
-            //log this
-            exception.printStackTrace();//rethrow service exception?
+            log.error(exception.getMessage(), exception);
             throw new HallsInUse(exception);
         }
     }
@@ -62,9 +64,8 @@ public class JDBCExhibitionEventService implements ExhibitionEventService {
         List<ExhibitionEvent> exhibitionEvents = new ArrayList<>();
         try (ExhibitionEventDao exhibitionEventDao = daoFactory.createExhibitionEventDao()) {
             return exhibitionEventDao.findAll();
-        } catch (Exception e) {
-            e.printStackTrace();//log this
-            //rethrow service exception??????
+        } catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
         }
         return exhibitionEvents;
     }
@@ -73,9 +74,8 @@ public class JDBCExhibitionEventService implements ExhibitionEventService {
     public Pageable<ExhibitionEvent> findAll(Integer pageId, Integer total) {
         try (ExhibitionEventDao exhibitionEventDao = daoFactory.createExhibitionEventDao()) {
             return exhibitionEventDao.findAll(pageId, total);
-        } catch (Exception e) {
-            e.printStackTrace();//log this
-            //rethrow service exception
+        } catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
             throw new RuntimeException();
         }
     }
@@ -85,8 +85,7 @@ public class JDBCExhibitionEventService implements ExhibitionEventService {
         try(ExhibitionEventDao exhibitionEventDao = daoFactory.createExhibitionEventDao()) {
             return exhibitionEventDao.findAllByStatus(pageId, total, status);
         } catch (Exception exception) {
-            exception.printStackTrace();//log this
-            //rethrow service exception
+            log.error(exception.getMessage(), exception);
             throw new RuntimeException(exception);
         }
     }
@@ -95,20 +94,19 @@ public class JDBCExhibitionEventService implements ExhibitionEventService {
     public void updateStatusById(Long exhibitionEventId, ExhibitionEventStatus status) {
         try (ExhibitionEventDao exhibitionEventDao = daoFactory.createExhibitionEventDao()) {
             exhibitionEventDao.updateStatusById(exhibitionEventId, status);
-        } catch (Exception e) {
-            e.printStackTrace();//log this
-            //rethrow service exception
+        } catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
         }
     }
 
     @Override
     public void update(Long exhibitionEventId) {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
     public void delete(Long id) {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
 }

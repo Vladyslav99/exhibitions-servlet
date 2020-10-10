@@ -5,8 +5,8 @@ import my.exhibitions.servlet.model.dao.exception.DaoException;
 import my.exhibitions.servlet.model.dao.mapper.UserMapper;
 import my.exhibitions.servlet.model.entity.User;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
-import javax.naming.OperationNotSupportedException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class JDBCUserDao implements UserDao {
+
+    private static final Logger log = Logger.getLogger(JDBCUserDao.class);
 
     private static final String CREATE_USER =
             "INSERT INTO USERS (username, email, password, role_id) VALUES (?, ?, ?, ?)";
@@ -43,7 +45,7 @@ public class JDBCUserDao implements UserDao {
             statement.setLong(4, user.getRole().getId());
             statement.executeUpdate();
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
@@ -60,7 +62,7 @@ public class JDBCUserDao implements UserDao {
                 return Optional.of(userMapper.extractFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
         return userOptional;
@@ -77,7 +79,7 @@ public class JDBCUserDao implements UserDao {
                 return Optional.of(userMapper.extractFromResultSet(resultSet));
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
         return userOptional;
@@ -114,6 +116,7 @@ public class JDBCUserDao implements UserDao {
         try {
             connection.close();
         } catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }

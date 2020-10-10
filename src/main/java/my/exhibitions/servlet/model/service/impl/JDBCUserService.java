@@ -9,11 +9,14 @@ import my.exhibitions.servlet.model.entity.User;
 import my.exhibitions.servlet.model.service.UserService;
 import my.exhibitions.servlet.util.Pageable;
 import my.exhibitions.servlet.util.PasswordEncodingUtil;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 
 public class JDBCUserService implements UserService {
+
+    private static final Logger log = Logger.getLogger(JDBCUserService.class);
 
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
@@ -22,8 +25,8 @@ public class JDBCUserService implements UserService {
         Optional<User> userOptional = Optional.empty();
         try(UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findUserByUsernameAndPassword(username, password);
-        } catch (Exception e) {
-            e.printStackTrace();//log this
+        } catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
         }
         return userOptional;
     }
@@ -33,8 +36,8 @@ public class JDBCUserService implements UserService {
         Optional<User> userOptional = Optional.empty();
         try(UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findUserByUsername(username);
-        } catch (Exception e) {
-            e.printStackTrace();//log this
+        } catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
         }
         return userOptional;
     }
@@ -50,9 +53,8 @@ public class JDBCUserService implements UserService {
 
         try(UserDao userDao = daoFactory.createUserDao()) {
             userDao.create(user);
-        } catch (Exception e) {
-            e.printStackTrace();//log this
-            //rethrow ServiceException ???????
+        } catch (Exception exception) {
+            log.error(exception.getMessage(), exception);
         }
     }
 

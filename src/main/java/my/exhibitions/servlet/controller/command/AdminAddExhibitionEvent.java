@@ -9,6 +9,7 @@ import my.exhibitions.servlet.model.service.ExhibitionEventService;
 import my.exhibitions.servlet.model.service.ExhibitionService;
 import my.exhibitions.servlet.model.service.HallService;
 import my.exhibitions.servlet.model.service.ServiceFactory;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -21,6 +22,8 @@ import java.util.stream.Stream;
 
 public class AdminAddExhibitionEvent implements Command{
 
+    private static final Logger log = Logger.getLogger(AdminAddExhibitionEvent.class);
+
     private final ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final ExhibitionService exhibitionService = serviceFactory.createExhibitionService();
     private final HallService hallService = serviceFactory.createHallService();
@@ -28,6 +31,7 @@ public class AdminAddExhibitionEvent implements Command{
 
     @Override
     public String execute(HttpServletRequest request) {
+        log.info("Execute method was invoked");
 
         String exhibitionIdStr = request.getParameter("exhibitionId");
         String dateFromStr = request.getParameter("dateFrom");
@@ -47,6 +51,7 @@ public class AdminAddExhibitionEvent implements Command{
         if (exhibitionIdStr == null || dateFromStr == null || dateToStr == null || timeFromStr == null
                 || timeToStr == null || ticketCostStr == null || maxAvailablePlacesStr == null || hallIdsStr == null){
             request.setAttribute("fieldsRequired", "All fields need to be filled or selected");
+            log.warn("Some of parameters were null");
             return "/WEB-INF/jsp/admin/add-exhibition-event.jsp";
         }
 
@@ -66,26 +71,31 @@ public class AdminAddExhibitionEvent implements Command{
 
         if (!isExhibitionIdValid(exhibitionId)){
             request.setAttribute("exhibitionError", "Error with exhibition");
+            log.warn("Exhibitions id is not valid");
             isDataValid = false;
         }
 
         if (!isDateValid(dateFrom, dateTo)){
             request.setAttribute("dateError", "Date from can't be bigger than date to or less than today");
+            log.warn("Date from and date to are not valid");
             isDataValid = false;
         }
 
         if (!isTimeValid(timeFrom, timeTo)){
             request.setAttribute("timeError", "Date to can't be less than date from!");
+            log.warn("Time from and time to are not valid");
             isDataValid = false;
         }
 
         if (!isTicketCostValid(ticketCost)){
             request.setAttribute("ticketCostError", "Ticket cost can't be less or equals zero!");
+            log.warn("Ticket cost is not valid");
             isDataValid = false;
         }
 
         if (!isMaxAvailablePlacesValid(maxAvailablePlaces)){
             request.setAttribute("maxPlaceAmountError", "Max place amount can't be less or equals zero!");
+            log.warn("Max available places value is not valid");
             isDataValid = false;
         }
 
@@ -107,6 +117,7 @@ public class AdminAddExhibitionEvent implements Command{
                 exhibitionEventService.create(exhibitionEventDTO);
             }catch (HallsInUse exception){
                 exception.printStackTrace();//log this
+                log.error("Max place amount can't be less or equals zero!", exception);
                 request.setAttribute("hallsInUseError", "Max place amount can't be less or equals zero!");
             }
         }

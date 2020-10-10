@@ -11,6 +11,7 @@ import my.exhibitions.servlet.model.entity.ExhibitionEvent;
 import my.exhibitions.servlet.model.entity.ExhibitionEventStatus;
 import my.exhibitions.servlet.model.entity.Hall;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -18,22 +19,23 @@ import java.util.*;
 
 public class JDBCExhibitionEventDao implements ExhibitionEventDao {
 
-    private static final String FIND_ALL_EXHIBITION_EVENTS = "select exhibition_events.id, exhibition_events.date_from, exhibition_events.date_to, exhibition_events.time_from,\n" +
-            "exhibition_events.time_to, exhibition_events.event_status, exhibition_events.ticket_cost, exhibition_events.max_available_places,\n" +
-            "exhibition_events.sold_places,\n" +
-            "exhibitions.id as exhibition_id, \n" +
-            "exhibitions.theme_english as exhibition_theme_english,\n" +
-            "exhibitions.theme_ukrainian as exhibition_theme_ukrainian, \n" +
-            "exhibitions.description_english as exhibition_description_english,\n" +
-            "exhibitions.description_ukrainian as exhibition_description_ukrainian,\n" +
+    private static final Logger log = Logger.getLogger(JDBCExhibitionEventDao.class);
+
+    private static final String FIND_ALL_EXHIBITION_EVENTS = "select exhibition_events.id, exhibition_events.date_from, " +
+            "exhibition_events.date_to, exhibition_events.time_from, " +
+            "exhibition_events.time_to, exhibition_events.event_status, " +
+            "exhibition_events.ticket_cost, exhibition_events.max_available_places, " +
+            "exhibition_events.sold_places, exhibitions.id as exhibition_id, " +
+            "exhibitions.theme_english as exhibition_theme_english, " +
+            "exhibitions.theme_ukrainian as exhibition_theme_ukrainian, " +
+            "exhibitions.description_english as exhibition_description_english, " +
+            "exhibitions.description_ukrainian as exhibition_description_ukrainian, " +
             "exhibitions.image_url as exhibition_image_url,\n" +
-            "halls.id as hall_id, \n" +
-            "halls.name_english as hall_name_english,\n" +
+            "halls.id as hall_id, halls.name_english as hall_name_english,\n" +
             "halls.name_ukrainian as hall_name_ukrainian, \n" +
             "halls.description_english as hall_description_english,\n" +
             "halls.description_ukrainian as hall_description_ukrainian,\n" +
-            "halls.image_url as hall_image_url\n" +
-            "from exhibitions, exhibition_events, exhibition_events_halls, halls\n" +
+            "halls.image_url as hall_image_url from exhibitions, exhibition_events, exhibition_events_halls, halls\n" +
             "where exhibitions.id = exhibition_events.exhibition_id\n" +
             "and exhibition_events_halls.exhibition_event_id = exhibition_events.id\n" +
             "and exhibition_events_halls.halls_id = halls.id order by exhibition_events.id";
@@ -180,12 +182,12 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
             }
             connection.setAutoCommit(true);
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             try {
                 connection.rollback();
                 connection.setAutoCommit(true);
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                log.error(exception.getMessage(), throwables);
                 throw new DaoException(throwables);
             }
             throw new DaoException(exception);
@@ -228,7 +230,7 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
             }
             return exhibitionEventOptional;
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
@@ -239,8 +241,7 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
             ResultSet resultSet = statement.executeQuery(FIND_ALL_EXHIBITION_EVENTS);
             return extract(resultSet);
         } catch (SQLException exception) {
-            //log here
-            exception.printStackTrace();
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
@@ -281,12 +282,12 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
                 return new Pageable<>(exhibitionEvents, pageAmount, pageId);
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             try {
                 connection.rollback();
                 connection.setAutoCommit(true);
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                log.error(exception.getMessage(), throwables);
                 throw new DaoException(throwables);
             }
             throw new DaoException(exception);
@@ -336,12 +337,12 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
                 return new Pageable<>(exhibitionEvents, pageAmount, pageId);
             }
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             try {
                 connection.rollback();
                 connection.setAutoCommit(true);
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                log.error(exception.getMessage(), throwables);
                 throw new DaoException(throwables);
             }
             throw new DaoException(exception);
@@ -385,7 +386,7 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
             statement.setLong(10, exhibitionEvent.getId());
             statement.executeUpdate();
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
@@ -398,14 +399,14 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
             statement.setLong(2, exhibitionEventId);
             statement.executeUpdate();
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
 
     @Override
     public void delete(Long id) throws DaoException {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
 
@@ -414,6 +415,7 @@ public class JDBCExhibitionEventDao implements ExhibitionEventDao {
         try {
             connection.close();
         } catch (SQLException exception) {
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }

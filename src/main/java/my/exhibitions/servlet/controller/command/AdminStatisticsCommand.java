@@ -5,11 +5,13 @@ import my.exhibitions.servlet.model.entity.ExhibitionEventStatus;
 import my.exhibitions.servlet.model.service.ExhibitionEventService;
 import my.exhibitions.servlet.model.service.ServiceFactory;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public class AdminStatisticsCommand implements Command {
+
+    private static final Logger log = Logger.getLogger(AdminStatisticsCommand.class);
 
     private static final int TOTAL_ITEMS_PER_PAGE = 2;
 
@@ -18,7 +20,7 @@ public class AdminStatisticsCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-
+        log.info("Execute method was invoked");
 
         String pageIdStr = request.getParameter("pageId");
         int pageId = 1;

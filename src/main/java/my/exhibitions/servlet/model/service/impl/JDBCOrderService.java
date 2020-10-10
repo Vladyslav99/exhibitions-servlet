@@ -8,11 +8,13 @@ import my.exhibitions.servlet.model.entity.Order;
 import my.exhibitions.servlet.model.entity.User;
 import my.exhibitions.servlet.model.service.OrderService;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
 
 public class JDBCOrderService implements OrderService {
+    private static final Logger log = Logger.getLogger(JDBCOrderService.class);
 
     private final DaoFactory daoFactory = DaoFactory.getInstance();
 
@@ -32,8 +34,7 @@ public class JDBCOrderService implements OrderService {
                     .build();
             orderDao.create(order);
         } catch (Exception exception) {
-            exception.printStackTrace();//log this
-            //rethrow service exception
+            log.error(exception.getMessage(), exception);
         }
     }
 

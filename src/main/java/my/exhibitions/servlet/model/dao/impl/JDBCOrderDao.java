@@ -7,6 +7,7 @@ import my.exhibitions.servlet.model.dao.exception.DaoException;
 import my.exhibitions.servlet.model.entity.ExhibitionEvent;
 import my.exhibitions.servlet.model.entity.Order;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class JDBCOrderDao implements OrderDao {
+
+    private static final Logger log = Logger.getLogger(JDBCOrderDao.class);
 
     private static final String INSERT_ORDER = "insert into orders (exhibition_event_id, user_id) values (?, ?)";
 
@@ -50,12 +53,12 @@ public class JDBCOrderDao implements OrderDao {
             exhibitionEventDao.update(exhibitionEvent);
             connection.setAutoCommit(true);
         } catch (Exception exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             try {
                 connection.rollback();
                 connection.setAutoCommit(true);
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                log.error(throwables.getMessage(), throwables);
                 throw new DaoException(throwables);
             }
             throw new DaoException(exception);
@@ -92,6 +95,7 @@ public class JDBCOrderDao implements OrderDao {
         try {
             connection.close();
         } catch (SQLException exception) {
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }

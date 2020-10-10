@@ -2,6 +2,7 @@ package my.exhibitions.servlet.controller;
 
 import my.exhibitions.servlet.controller.command.*;
 import my.exhibitions.servlet.model.entity.User;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -16,11 +17,14 @@ import java.util.Map;
 
 public class FrontController extends HttpServlet {
 
+    private static final Logger log = Logger.getLogger(FrontController.class);
+
     private final Map<String, Command> commands = new HashMap<>();
     private final List<User> loggedUsers = new ArrayList<>();
 
     @Override
     public void init(ServletConfig config) {
+        log.info("Initialization");
         commands.put("/app/login", new LoginCommand());//replace null
         commands.put("/app/logout", new LogoutCommand());
         commands.put("/app/registration", new RegistrationCommand());//replace null
@@ -48,6 +52,7 @@ public class FrontController extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info(String.format("Servlet method %s was invoked", request.getMethod()));
         String path = request.getRequestURI();
 
         Command command = commands.getOrDefault(path, (r) -> "/index.jsp");

@@ -27,6 +27,68 @@
         <fmt:message key="admin_panel.exhibition_events"/>
     </h1>
 
+    <div class="container d-flex flex-column">
+        <div class="d-flex justify-content-center">
+            <form action="${pageContext.request.contextPath}/app/user/exhibition-event-list?filter=date"
+                  class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="date" name="date" class="form-control" id="inputDateFrom">
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2">
+                    <fmt:message key="exhibition_list.find_button"/>
+                </button>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <form action="${pageContext.request.contextPath}/app/user/exhibition-event-list?filter=ticketCost"
+                  class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="number" name="ticketCostFrom" class="form-control">
+                </div>
+
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="number" name="ticketCostTo" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2">
+                    <fmt:message key="exhibition_list.find_button"/>
+                </button>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <form action="${pageContext.request.contextPath}/app/user/exhibition-event-list?filter=exhibition"
+                  class="form-inline">
+
+                <div class="form-group mx-sm-3 mb-2">
+                    <select name="exhibitionId" class="form-control">
+                        <c:forEach var="exhibition" items="${requestScope.exhibitions}">
+                            <c:choose>
+                                <c:when test="${sessionScope.lang == 'ua'}">
+                                    <option value="${exhibition.id}">
+                                            ${exhibition.themeUkrainian}
+                                    </option>
+                                </c:when>
+                                <c:otherwise>
+                                    <option value="${exhibition.id}">
+                                            ${exhibition.themeEnglish}
+                                    </option>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2">
+                    <fmt:message key="exhibition_list.find_button"/>
+                </button>
+            </form>
+        </div>
+
+    </div>
+
     <c:forEach var="exhibitionEvent" items="${requestScope.exhibitionEventPageable.items}">
         <div class="card" style="margin-top: 20px; margin-bottom: 20px;">
             <div class="container d-flex p-0">

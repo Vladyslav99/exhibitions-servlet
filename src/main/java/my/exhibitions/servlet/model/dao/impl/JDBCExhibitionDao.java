@@ -5,6 +5,7 @@ import my.exhibitions.servlet.model.dao.exception.DaoException;
 import my.exhibitions.servlet.model.dao.mapper.ExhibitionMapper;
 import my.exhibitions.servlet.model.entity.Exhibition;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class JDBCExhibitionDao implements ExhibitionDao {
+
+    private static final Logger log = Logger.getLogger(JDBCExhibitionDao.class);
 
     private static final String FIND_ALL_EXHIBITIONS = "select exhibitions.id as exhibition_id, " +
             "exhibitions.theme_english as exhibition_theme_english, " +
@@ -32,12 +35,12 @@ public class JDBCExhibitionDao implements ExhibitionDao {
 
     @Override
     public void create(Exhibition entity) throws DaoException {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
     public Optional<Exhibition> findById(Long id) throws DaoException {
-        return null;
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
@@ -51,7 +54,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
             }
             return exhibitions;
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
@@ -63,12 +66,12 @@ public class JDBCExhibitionDao implements ExhibitionDao {
 
     @Override
     public void update(Exhibition entity) throws DaoException {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
     public void delete(Long id) throws DaoException {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
@@ -76,6 +79,7 @@ public class JDBCExhibitionDao implements ExhibitionDao {
         try {
             connection.close();
         } catch (SQLException exception) {
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }

@@ -5,6 +5,7 @@ import my.exhibitions.servlet.model.dao.exception.DaoException;
 import my.exhibitions.servlet.model.dao.mapper.HallMapper;
 import my.exhibitions.servlet.model.entity.Hall;
 import my.exhibitions.servlet.util.Pageable;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class JDBCHallDao implements HallDao {
+
+    private static final Logger log = Logger.getLogger(JDBCHallDao.class);
 
     private static final String FIND_ALL_HALLS = "select halls.id as hall_id, " +
             "halls.name_english as hall_name_english, " +
@@ -31,12 +34,12 @@ public class JDBCHallDao implements HallDao {
 
     @Override
     public void create(Hall entity) {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
     public Optional<Hall> findById(Long id) throws DaoException {
-        return null;
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
@@ -50,7 +53,7 @@ public class JDBCHallDao implements HallDao {
             }
             return halls;
         } catch (SQLException exception) {
-            exception.printStackTrace();//log this
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
@@ -62,12 +65,12 @@ public class JDBCHallDao implements HallDao {
 
     @Override
     public void update(Hall entity) throws DaoException {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
     @Override
     public void delete(Long id) throws DaoException {
-
+        throw new UnsupportedOperationException("Operation has not been implemented yet!");
     }
 
 
@@ -76,6 +79,7 @@ public class JDBCHallDao implements HallDao {
         try {
             connection.close();
         } catch (SQLException exception) {
+            log.error(exception.getMessage(), exception);
             throw new DaoException(exception);
         }
     }
